@@ -1,1 +1,620 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#b45309">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Ốc Hẻm">
+<title>Ốc Hẻm Huế - Bán hàng</title>
+<style>
+:root{--bg:#fdf8f0;--a6:#d97706;--a7:#b45309;--a8:#92400e;--a5:#f59e0b;--soft:#fffaf0;--line:#fcd9a8;--ink:#451a03;--mut:#b08968}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body,#root{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input{font-family:inherit}
+.screen{max-width:680px;margin:0 auto;padding:16px;padding-bottom:100px}
+.title{font-size:22px;font-weight:800;color:var(--a8);text-align:center;margin:4px 0}
+.sub{font-size:12px;color:var(--a5);text-align:center}
+.row{display:flex;align-items:center;gap:8px}
+.rowsb{display:flex;align-items:center;justify-content:space-between}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;font-weight:700;padding:12px 14px;font-size:15px}
+.amber{background:var(--a7);color:#fff}.light{background:#fff;border:1px solid var(--line);color:var(--a8)}
+.soft{background:#fde8c8;color:var(--a8)}.red{background:#dc2626;color:#fff}.green{background:#16a34a;color:#fff}.ghost{color:var(--a7);font-weight:600}
+.amber:disabled,.light:disabled{opacity:.4}
+.tables{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+@media(min-width:520px){.tables{grid-template-columns:repeat(4,1fr)}}
+.tcell{border-radius:14px;padding:12px;text-align:left}
+.tbusy{background:var(--a6);color:#fff;box-shadow:0 2px 6px rgba(180,83,9,.25)}
+.tfree{background:#fff;border:1px dashed var(--line);color:var(--mut)}
+.tname{font-weight:800}.tinfo{font-size:11px;margin-top:4px}
+.cat{background:var(--a8);color:#fff;font-weight:700;padding:7px 12px;border-radius:10px;font-size:14px;margin:14px 0 8px}
+.items{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(min-width:520px){.items{grid-template-columns:repeat(3,1fr)}}
+.item{position:relative;text-align:left;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px}
+.item.on{background:var(--a6);color:#fff}
+.iname{font-size:14px;font-weight:600;line-height:1.2;padding-right:18px}
+.iprice{font-size:12px;margin-top:4px;color:var(--a5)}.item.on .iprice{color:#fde8c8}
+.qbadge{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--a7);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.search{position:relative;flex:1}
+.search input{width:100%;padding:11px 12px 11px 36px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:15px;outline:none}
+.search span{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--a5)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px;z-index:20;padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+.bar .btn{width:100%;justify-content:space-between}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:30;display:flex}
+.sheet{margin-top:auto;width:100%;max-height:88vh;background:#fff;border-radius:18px 18px 0 0;display:flex;flex-direction:column;overflow:hidden}
+.cmodal{align-items:center;justify-content:center;padding:16px}
+.modal{background:#fff;border-radius:18px;width:100%;max-width:400px;max-height:88vh;overflow:auto}
+.ohead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--soft)}
+.olist{flex:1;overflow:auto;padding:4px 12px;min-height:60px}
+.orow{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #fbe6cf}
+.ofoot{border-top:1px solid var(--line);background:var(--soft);padding:14px;display:flex;flex-direction:column;gap:10px}
+.qbtn{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+.qminus{background:#fde8c8;color:var(--a8)}.qplus{background:var(--a6);color:#fff}
+.inp{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;outline:none;font-size:15px}
+.big{font-size:18px;font-weight:800;color:var(--a8)}.muted{color:var(--a5);font-size:12px}
+.flex2{display:flex;gap:8px}.flex2 .btn{flex:1}
+.flex3{display:flex;gap:8px}.flex3 .btn{flex:1}
+.editrow{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;margin-bottom:8px}
+.editrow .nm{flex:1;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;font-size:14px;outline:none}
+.editrow .pr{width:62px;padding:8px;border:1px solid var(--line);border-radius:8px;font-size:14px;text-align:right;outline:none}
+.catinp{flex:1;background:var(--a8);color:#fff;font-weight:700;padding:8px 12px;border-radius:10px;font-size:14px;outline:none;border:none}
+.iconbtn{padding:6px;color:#ef9a9a;font-size:18px}
+.tot{font-size:18px}.tot b{color:var(--a8)}
+.rowg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.rcell{padding:14px;border-radius:12px;background:#fde8c8;color:var(--a8);font-weight:700;text-align:center}
+.sold{border:1px solid #fbe6cf;border-radius:12px;overflow:hidden}
+.sold .sr{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;font-size:14px;border-bottom:1px solid #fdf0db}
+.sold .sr:last-child{border:none}
+.report-hero{background:var(--a6);color:#fff;border-radius:16px;padding:16px;text-align:center}
+.daycard{background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.dayhead{display:flex;justify-content:space-between;align-items:center;padding:12px 14px}
+.daybody{padding:0 14px 12px;border-top:1px solid #fbe6cf}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+.lbl{font-size:11px;font-weight:700;color:#fff;background:var(--a6);padding:2px 8px;border-radius:20px}
+@media print{body *{visibility:hidden!important}#print-area,#print-area *{visibility:visible!important}#print-area{display:block!important;position:fixed;left:0;top:0;width:100%}@page{margin:6mm}}
+#print-area{display:none}
+</style>
+
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+
+<script type="text/babel">
+const {useState,useEffect,useMemo}=React;
+
+const RAW=[
+ {cat:"Ốc Cà Na",items:["Trứng muối","Bơ tỏi","Rang muối","Xào me","Xào bắp","Xào xả ớt"].map(n=>({name:n,price:35}))},
+ {cat:"Ốc nhảy (theo mùa)",items:[{name:"Hấp xả",price:35},{name:"Xào xả ớt",price:35}]},
+ {cat:"Sò điệp",items:["Nướng trứng cút","Nướng mỡ hành","Nướng Phô Mai"].map(n=>({name:n,price:35}))},
+ {cat:"Ốc hương",items:["Rang muối","Cháy tỏi","Trứng muối","Xào bắp","Xào me","Hấp xả"].map(n=>({name:n,price:60}))},
+ {cat:"Hàu",items:["Nướng mỡ hành","Nướng Phô Mai","Hàu nướng chảo"].map(n=>({name:n,price:35}))},
+ {cat:"Ốc tỏi",items:[{name:"Nướng mỡ hành",price:25,unit:"/con"},{name:"Nướng muối ớt",price:25,unit:"/con"}]},
+ {cat:"Ốc len",items:[{name:"Xào dừa",price:40}]},
+ {cat:"Ốc móng tay",items:["Xào sa tế","Xào rau muống","Xào mì","Nướng mỡ hành"].map(n=>({name:n,price:35}))},
+ {cat:"Càng ghẹ",items:["Rang muối","Xào me","Trứng muối","Xả ớt"].map(n=>({name:n,price:60}))},
+ {cat:"Ốc nhung (theo mùa)",items:["Hấp xả ớt","Xào xả ớt","Nướng mỡ hành","Nướng muối ớt"].map(n=>({name:n,price:50}))},
+ {cat:"Sò lụa",items:["Xào xả ớt","Hấp xả","Hấp thái","Xào me"].map(n=>({name:n,price:35}))},
+ {cat:"Ốc bưu",items:[{name:"Hấp xả",price:35},{name:"Ốc nhồi nướng",price:35}]},
+ {cat:"Tu hài (theo mùa)",items:[{name:"Nướng mỡ hành",price:50},{name:"Hấp xả",price:50}]},
+ {cat:"Nghêu",items:["Hấp xả","Hấp thái","Xào xả ớt"].map(n=>({name:n,price:35}))},
+ {cat:"Gà nướng",items:[{name:"Chân gà nướng",price:35},{name:"Cánh gà nướng",price:45}]},
+ {cat:"Sò mai",items:[{name:"Nướng mỡ hành",price:50},{name:"Nướng Phô Mai",price:50}]},
+ {cat:"Nước ngọt & khác",items:[{name:"Pepsi",price:10},{name:"7up",price:10},{name:"Suối",price:5},{name:"Bò húc",price:12},{name:"Khăn lạnh",price:1}]},
+];
+const DEF_SHOP={name:"ỐC HẺM HUẾ",addr:"9 Kiệt 10 Nguyễn Du, Gia Hội, TP Huế",phone:"0906.584.518 - 0906.525.234"};
+const TABLES=Array.from({length:30},(_,i)=>i+1);
+const buildDefault=()=>RAW.map((c,ci)=>({catId:"c"+ci,cat:c.cat,items:c.items.map((it,ii)=>({id:"c"+ci+"i"+ii,...it}))}));
+const nid=()=>"n"+Date.now().toString(36)+Math.floor(Math.random()*1000);
+const fmt=k=>(k*1000).toLocaleString("vi-VN")+"đ";
+const todayStr=()=>new Date().toLocaleDateString("vi-VN");
+const freshSales=()=>({date:todayStr(),revenue:0,bills:0,items:{}});
+
+const mem={};
+const store={
+ get(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):(mem[k]??null);}catch(e){return mem[k]??null;}},
+ set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){mem[k]=v;}}
+};
+
+/* ====== MÁY IN NHIỆT BLUETOOTH (ESC/POS, in dạng ảnh để đúng tiếng Việt) ====== */
+const BT={device:null,char:null,name:""};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const PRINT_SERVICES=[0x18F0,0xFFE0,0xFF00,0xFF80,0xAE30,0xFEE0,0xFFB0,"49535343-fe7d-4ae5-8fa9-9fafd205e455","e7810a71-73ae-499d-8c15-faa9aef0c3f2"];
+
+function buildOps(data,shop){
+ const o=[];
+ o.push({t:'c',s:shop.name,b:1,sz:'h'});
+ o.push({t:'c',s:shop.addr,sz:'s'});
+ o.push({t:'c',s:'ĐT: '+shop.phone,sz:'s'});
+ o.push({t:'d'});
+ if(data.kind==='bill'){
+  o.push({t:'l',s:'Bàn: '+data.table});
+  o.push({t:'l',s:new Date().toLocaleString('vi-VN'),sz:'s'});
+  o.push({t:'d'});
+  data.items.forEach(it=>{o.push({t:'l',s:it.name});o.push({t:'lr',l:'  '+it.qty+' x '+fmt(it.price),r:fmt(it.price*it.qty)});});
+  o.push({t:'d'});
+  o.push({t:'lr',l:'TỔNG CỘNG',r:fmt(data.total),b:1,sz:'h'});
+  if(data.paid>0){o.push({t:'lr',l:'Khách đưa',r:data.paid.toLocaleString('vi-VN')+'đ'});o.push({t:'lr',l:'Thối lại',r:(data.change>=0?data.change:0).toLocaleString('vi-VN')+'đ'});}
+  o.push({t:'d'});
+  o.push({t:'c',s:'Cảm ơn quý khách!',sz:'s'});o.push({t:'c',s:'Hẹn gặp lại',sz:'s'});
+ }else{
+  o.push({t:'c',s:'TỔNG KẾT CUỐI NGÀY',b:1});
+  o.push({t:'c',s:'Ngày '+data.date,sz:'s'});
+  o.push({t:'d'});
+  o.push({t:'lr',l:'TỔNG DOANH THU',r:fmt(data.revenue),b:1,sz:'h'});
+  o.push({t:'lr',l:'Số bill',r:String(data.bills)});
+  o.push({t:'lr',l:'TB / bill',r:fmt(data.avg)});
+  o.push({t:'d'});
+  o.push({t:'l',s:'MÓN ĐÃ BÁN',b:1});
+  (data.items||[]).forEach(it=>o.push({t:'lr',l:it.name+' x'+it.qty,r:fmt(it.rev)}));
+  o.push({t:'d'});o.push({t:'c',s:'--- Hết ---',sz:'s'});
+ }
+ return o;
+}
+function renderReceiptCanvas(ops,width){
+ const FN=width>=560?27:21,FH=width>=560?34:26,FS=width>=560?22:17;
+ const lh=v=>Math.round(v*1.45),pad=8;
+ let H=14;ops.forEach(o=>{if(o.t==='d')H+=lh(FS);else if(o.t==='sp')H+=lh(FS)/2;else H+=lh(o.sz==='h'?FH:o.sz==='s'?FS:FN);});H+=18;
+ const c=document.createElement('canvas');c.width=width;c.height=H;
+ const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,width,H);x.fillStyle='#000';
+ let y=12;
+ const setF=o=>{const sz=o.sz==='h'?FH:o.sz==='s'?FS:FN;x.font=(o.b?'bold ':'')+sz+'px "Courier New",monospace';return sz;};
+ ops.forEach(o=>{
+  if(o.t==='d'){const sz=FS;y+=lh(sz)/2;x.save();x.strokeStyle='#000';x.lineWidth=1;x.setLineDash([4,4]);x.beginPath();x.moveTo(pad,y);x.lineTo(width-pad,y);x.stroke();x.restore();y+=lh(sz)/2;return;}
+  if(o.t==='sp'){y+=lh(FS)/2;return;}
+  const sz=setF(o),ly=y+sz;
+  if(o.t==='c'){x.textAlign='center';x.fillText(o.s,width/2,ly);}
+  else if(o.t==='l'){x.textAlign='left';x.fillText(o.s,pad,ly);}
+  else{x.textAlign='right';x.fillText(o.r,width-pad,ly);x.textAlign='left';const rw=x.measureText(o.r).width;const maxw=width-pad*2-rw-10;let s=o.l;while(x.measureText(s).width>maxw&&s.length>1)s=s.slice(0,-1);x.fillText(s,pad,ly);}
+  y+=lh(sz);
+ });
+ return c;
+}
+function canvasToEscPos(canvas,threshold){
+ threshold=threshold||175;
+ const w=canvas.width,h=canvas.height,ctx=canvas.getContext('2d'),img=ctx.getImageData(0,0,w,h).data;
+ const bpr=Math.ceil(w/8),raster=new Uint8Array(bpr*h);
+ for(let y=0;y<h;y++)for(let xx=0;xx<w;xx++){const i=(y*w+xx)*4;const lum=0.299*img[i]+0.587*img[i+1]+0.114*img[i+2];if(img[i+3]>128&&lum<threshold)raster[y*bpr+(xx>>3)]|=(0x80>>(xx&7));}
+ const header=[0x1D,0x76,0x30,0x00,bpr&0xff,(bpr>>8)&0xff,h&0xff,(h>>8)&0xff];
+ const init=[0x1B,0x40,0x1B,0x61,0x00];
+ const tail=[0x0A,0x0A,0x0A,0x1D,0x56,0x42,0x00];
+ const out=new Uint8Array(init.length+header.length+raster.length+tail.length);
+ out.set(init,0);out.set(header,init.length);out.set(raster,init.length+header.length);out.set(tail,init.length+header.length+raster.length);
+ return out;
+}
+async function btSend(bytes){
+ const ch=BT.char;if(!ch)throw new Error("Chưa kết nối máy in");
+ const CH=180;
+ for(let i=0;i<bytes.length;i+=CH){
+  const slice=bytes.slice(i,i+CH);
+  if(ch.writeValueWithoutResponse&&ch.properties.writeWithoutResponse)await ch.writeValueWithoutResponse(slice);
+  else await ch.writeValue(slice);
+  await sleep(14);
+ }
+}
+async function btPrint(data,shop,width){const ops=buildOps(data,shop);const c=renderReceiptCanvas(ops,width);await btSend(canvasToEscPos(c));}
+
+function App(){
+ const [boot]=useState(()=>{
+  const ss=store.get("oc_sales");let hist=store.get("oc_history")||[];let sales;
+  if(ss&&ss.date===todayStr())sales={items:{},...ss};
+  else{if(ss&&(ss.revenue>0||ss.bills>0))hist=[{date:ss.date,revenue:ss.revenue,bills:ss.bills,items:ss.items||{}},...hist.filter(d=>d.date!==ss.date)].slice(0,31);sales=freshSales();}
+  return{sales,hist};
+ });
+ const [menu,setMenu]=useState(()=>store.get("oc_menu")||buildDefault());
+ const [orders,setOrders]=useState(()=>store.get("oc_orders")||{});
+ const [sales,setSales]=useState(boot.sales);
+ const [history,setHistory]=useState(boot.hist);
+ const [shop,setShop]=useState(()=>store.get("oc_shop")||DEF_SHOP);
+ const [settings,setSettings]=useState(()=>store.get("oc_settings")||{paper:58});
+ const [view,setView]=useState("tables");
+ const [table,setTable]=useState(null);
+ const [q,setQ]=useState("");
+ const [paid,setPaid]=useState("");
+ const [showOrder,setShowOrder]=useState(false);
+ const [moveOpen,setMoveOpen]=useState(false);
+ const [payOpen,setPayOpen]=useState(false);
+ const [reportOpen,setReportOpen]=useState(false);
+ const [printData,setPrintData]=useState(null);
+ const [openDay,setOpenDay]=useState(null);
+ const [btStatus,setBtStatus]=useState(BT.char?"connected":"off");
+ const [btName,setBtName]=useState(BT.name||"");
+
+ useEffect(()=>store.set("oc_menu",menu),[menu]);
+ useEffect(()=>store.set("oc_orders",orders),[orders]);
+ useEffect(()=>store.set("oc_sales",sales),[sales]);
+ useEffect(()=>store.set("oc_history",history),[history]);
+ useEffect(()=>store.set("oc_shop",shop),[shop]);
+ useEffect(()=>store.set("oc_settings",settings),[settings]);
+
+ const paperW=settings.paper===80?576:384;
+ const itemMap=useMemo(()=>{const m={};menu.forEach(c=>c.items.forEach(it=>m[it.id]={...it,cat:c.cat}));return m;},[menu]);
+ const tableTotal=t=>Object.entries(orders[t]||{}).reduce((s,[id,qty])=>s+(itemMap[id]?itemMap[id].price*qty:0),0);
+ const tableCount=t=>Object.values(orders[t]||{}).reduce((s,qty)=>s+qty,0);
+
+ const setT=u=>setOrders(o=>({...o,[table]:u(o[table]||{})}));
+ const add=id=>setT(t=>({...t,[id]:(t[id]||0)+1}));
+ const dec=id=>setT(t=>{const n={...t};n[id]=(n[id]||0)-1;if(n[id]<=0)delete n[id];return n;});
+ const remove=id=>setT(t=>{const n={...t};delete n[id];return n;});
+ const clearTable=()=>{if(confirm("Xóa toàn bộ món của bàn "+table+"?")){setOrders(o=>{const n={...o};delete n[table];return n;});setPaid("");}};
+
+ const orderList=Object.entries(orders[table]||{}).map(([id,qty])=>itemMap[id]?{...itemMap[id],qty}:null).filter(Boolean);
+ const total=orderList.reduce((s,it)=>s+it.price*it.qty,0);
+ const count=orderList.reduce((s,it)=>s+it.qty,0);
+ const paidNum=parseInt(paid.replace(/\D/g,"")||"0",10);
+ const change=paidNum-total*1000;
+
+ const today=todayStr();
+ const sToday=sales.date===today?sales:freshSales();
+ const soldItems=Object.values(sToday.items||{}).sort((a,b)=>b.qty-a.qty);
+ const openValue=TABLES.reduce((s,t)=>s+tableTotal(t),0);
+ const openTables=TABLES.filter(t=>tableTotal(t)>0).length;
+ const avg=sToday.bills?Math.round(sToday.revenue/sToday.bills):0;
+
+ const browserPrint=data=>{setPrintData(data);requestAnimationFrame(()=>requestAnimationFrame(()=>{try{window.print();}catch(e){}}));};
+ const doPrint=data=>{if(BT.char){btPrint(data,shop,paperW).catch(e=>{alert("Lỗi in Bluetooth, chuyển sang in qua hộp thoại.\n"+(e.message||e));browserPrint(data);});}else browserPrint(data);};
+ const printBill=()=>orderList.length&&doPrint({kind:"bill",table,items:orderList.map(it=>({name:it.name,price:it.price,qty:it.qty})),total,paid:paidNum,change});
+ const printReport=()=>doPrint({kind:"report",date:today,revenue:sToday.revenue,bills:sToday.bills,avg,items:soldItems,openValue,openTables});
+ const printDay=d=>{const its=Object.values(d.items||{}).sort((a,b)=>b.qty-a.qty);doPrint({kind:"report",date:d.date,revenue:d.revenue,bills:d.bills,avg:d.bills?Math.round(d.revenue/d.bills):0,items:its});};
+
+ const doCheckout=withPrint=>{
+  if(!orderList.length)return;
+  const t=table,amt=total,snap=orderList.map(it=>({id:it.id,name:it.name,price:it.price,qty:it.qty})),pNum=paidNum,ch=change;
+  setSales(s=>{const b=s.date===today?s:freshSales();const items={...(b.items||{})};snap.forEach(it=>{const e=items[it.id]||{name:it.name,qty:0,rev:0};items[it.id]={name:it.name,qty:e.qty+it.qty,rev:e.rev+it.price*it.qty};});return{date:today,revenue:b.revenue+amt,bills:b.bills+1,items};});
+  setOrders(o=>{const n={...o};delete n[t];return n;});
+  setPaid("");setPayOpen(false);setShowOrder(false);setView("tables");setTable(null);
+  if(withPrint)doPrint({kind:"bill",table:t,items:snap,total:amt,paid:pNum,change:ch});
+ };
+ const moveTable=target=>{setOrders(o=>{const n={...o};n[target]=n[table];delete n[table];return n;});setTable(target);setMoveOpen(false);};
+ const closeDay=()=>{if(confirm("CHỐT NGÀY?\nDoanh thu hôm nay sẽ được lưu vào Lịch sử và đặt lại về 0.")){if(sToday.revenue>0||sToday.bills>0)setHistory(h=>[{date:sToday.date,revenue:sToday.revenue,bills:sToday.bills,items:sToday.items||{}},...h.filter(x=>x.date!==sToday.date)].slice(0,31));setSales(freshSales());setReportOpen(false);}};
+
+ /* ---- Bluetooth ---- */
+ const btConnect=async()=>{
+  if(!navigator.bluetooth){alert("Thiết bị/trình duyệt này không hỗ trợ Bluetooth (iPhone không hỗ trợ in Bluetooth qua web). Hãy dùng 'In qua hộp thoại'.");return;}
+  try{
+   setBtStatus("connecting");
+   const dev=await navigator.bluetooth.requestDevice({acceptAllDevices:true,optionalServices:PRINT_SERVICES});
+   const srv=await dev.gatt.connect();
+   const services=await srv.getPrimaryServices();
+   let ch=null;
+   for(const s of services){let cs;try{cs=await s.getCharacteristics();}catch(e){continue;}for(const c of cs){if(c.properties.write||c.properties.writeWithoutResponse){ch=c;break;}}if(ch)break;}
+   if(!ch)throw new Error("Không tìm thấy kênh in trên thiết bị này. Máy in có thể chưa được hỗ trợ.");
+   BT.device=dev;BT.char=ch;BT.name=dev.name||"Máy in nhiệt";
+   dev.addEventListener('gattserverdisconnected',()=>{BT.char=null;setBtStatus("off");});
+   setBtName(BT.name);setBtStatus("connected");
+  }catch(e){setBtStatus(BT.char?"connected":"off");if(e.name!=='NotFoundError')alert("Không kết nối được: "+(e.message||e));}
+ };
+ const btDisconnect=()=>{try{BT.device&&BT.device.gatt&&BT.device.gatt.disconnect();}catch(e){}BT.char=null;setBtStatus("off");};
+ const btTest=()=>btPrint({kind:"bill",table:"THỬ",items:[{name:"Ốc hương rang muối",qty:1,price:60},{name:"Hàu nướng mỡ hành",qty:2,price:35}],total:130,paid:200000,change:70000},shop,paperW).catch(e=>alert("Lỗi in thử: "+(e.message||e)));
+
+ const filtered=useMemo(()=>{const t=q.trim().toLowerCase();if(!t)return menu;return menu.map(c=>({...c,items:c.items.filter(i=>(c.cat+" "+i.name).toLowerCase().includes(t))})).filter(c=>c.items.length);},[q,menu]);
+ const setCatName=(catId,name)=>setMenu(m=>m.map(c=>c.catId===catId?{...c,cat:name}:c));
+ const setItem=(catId,id,p)=>setMenu(m=>m.map(c=>c.catId===catId?{...c,items:c.items.map(it=>it.id===id?{...it,...p}:it)}:c));
+ const addItem=catId=>setMenu(m=>m.map(c=>c.catId===catId?{...c,items:[...c.items,{id:nid(),name:"Món mới",price:0}]}:c));
+ const delItem=(catId,id)=>setMenu(m=>m.map(c=>c.catId===catId?{...c,items:c.items.filter(it=>it.id!==id)}:c));
+ const addCat=()=>setMenu(m=>[...m,{catId:nid(),cat:"Nhóm mới",items:[{id:nid(),name:"Món mới",price:0}]}]);
+ const delCat=catId=>setMenu(m=>m.filter(c=>c.catId!==catId));
+ const resetMenu=()=>{if(confirm("Khôi phục menu gốc? Mọi chỉnh sửa sẽ mất."))setMenu(buildDefault());};
+
+ const dash={borderTop:"1px dashed #000",margin:"8px 0"},rsb={display:"flex",justifyContent:"space-between"};
+ const monthTotal=history.reduce((s,d)=>s+d.revenue,0)+sToday.revenue;
+
+ const dayRow=(d,isToday)=>{
+  const open=openDay===(isToday?"_today":d.date);
+  const its=Object.values(d.items||{}).sort((a,b)=>b.qty-a.qty);
+  return(
+   <div className="daycard" key={isToday?"_today":d.date}>
+    <button className="dayhead" style={{width:"100%"}} onClick={()=>setOpenDay(open?null:(isToday?"_today":d.date))}>
+     <div style={{textAlign:"left"}}>
+      <div style={{fontWeight:700,color:"var(--a8)"}}><span className="dot" style={{background:isToday?"#16a34a":"var(--a6)"}}></span>{d.date} {isToday&&<span className="lbl">Hôm nay</span>}</div>
+      <div className="muted">{d.bills} bill</div>
+     </div>
+     <div style={{textAlign:"right"}}><div className="big">{fmt(d.revenue)}</div><div className="muted">{open?"▲ thu gọn":"▼ chi tiết"}</div></div>
+    </button>
+    {open&&(
+     <div className="daybody">
+      {its.length===0?<div className="muted" style={{padding:"10px 0"}}>Chưa có món nào</div>:(
+       <div className="sold" style={{margin:"10px 0"}}>{its.map((it,i)=>(<div className="sr" key={i}><span style={{flex:1}}>{it.name}</span><span className="muted" style={{width:36,textAlign:"center"}}>x{it.qty}</span><b style={{width:90,textAlign:"right"}}>{fmt(it.rev)}</b></div>))}</div>
+      )}
+      <button className="btn light" style={{width:"100%"}} onClick={()=>printDay(d)}>🖨 In lại tổng kết ngày này</button>
+     </div>
+    )}
+   </div>
+  );
+ };
+
+ const orderPanel=()=>(
+  <React.Fragment>
+   <div className="ohead">
+    <b style={{color:"var(--a8)"}}>🧾 Bàn {table}</b>
+    <div className="row">
+     {orderList.length>0&&<button className="ghost" onClick={()=>setMoveOpen(true)}>🔀 Đổi bàn</button>}
+     {orderList.length>0&&<button style={{color:"#dc2626",fontWeight:600}} onClick={clearTable}>🗑 Xóa</button>}
+    </div>
+   </div>
+   <div className="olist">
+    {orderList.length===0&&<div style={{textAlign:"center",color:"var(--mut)",padding:"30px 0"}}>Chưa chọn món nào</div>}
+    {orderList.map(it=>(
+     <div className="orow" key={it.id}>
+      <div style={{flex:1,minWidth:0}}><div style={{fontSize:14,fontWeight:600}}>{it.name}</div><div className="muted">{it.cat} · {fmt(it.price)}{it.unit||""}</div></div>
+      <button className="qbtn qminus" onClick={()=>dec(it.id)}>−</button>
+      <b style={{width:24,textAlign:"center"}}>{it.qty}</b>
+      <button className="qbtn qplus" onClick={()=>add(it.id)}>+</button>
+      <div style={{width:78,textAlign:"right",fontWeight:700}}>{fmt(it.price*it.qty)}</div>
+      <button className="iconbtn" onClick={()=>remove(it.id)}>✕</button>
+     </div>
+    ))}
+   </div>
+   <div className="ofoot">
+    <div className="rowsb tot"><span>Tổng cộng</span><b>{fmt(total)}</b></div>
+    <div><div className="muted" style={{marginBottom:4}}>Tiền khách đưa</div><input className="inp" inputMode="numeric" value={paid} onChange={e=>setPaid(e.target.value)} placeholder="VD: 500000"/></div>
+    {paidNum>0&&<div className="rowsb" style={{fontWeight:700,color:change>=0?"#15803d":"#dc2626"}}><span>{change>=0?"Tiền thối lại":"Khách đưa thiếu"}</span><span>{Math.abs(change).toLocaleString("vi-VN")}đ</span></div>}
+    <div className="flex2">
+     <button className="btn light" disabled={!orderList.length} onClick={printBill}>🖨 In bill</button>
+     <button className="btn amber" disabled={!orderList.length} onClick={()=>orderList.length&&setPayOpen(true)}>💳 Thanh toán</button>
+    </div>
+   </div>
+  </React.Fragment>
+ );
+
+ return(
+ <div>
+  {view==="tables"&&(
+   <div className="screen">
+    <div className="title">{shop.name}</div>
+    <div className="sub">{shop.addr}</div>
+    <button className="card" style={{width:"100%",textAlign:"left",margin:"14px 0 10px"}} onClick={()=>setReportOpen(true)}>
+     <div className="muted">📊 Doanh thu hôm nay ({sToday.date}) · bấm xem tổng kết</div>
+     <div className="big">{fmt(sToday.revenue)} <span className="muted" style={{fontWeight:400}}>· {sToday.bills} bill</span></div>
+    </button>
+    <div className="flex3">
+     <button className="btn light" onClick={()=>setView("edit")}>✏️ Menu</button>
+     <button className="btn light" onClick={()=>{setOpenDay(null);setView("history");}}>📅 Lịch sử</button>
+     <button className="btn light" onClick={()=>setView("settings")}>⚙️ Cài đặt</button>
+    </div>
+    <div className="tables">
+     {TABLES.map(t=>{const busy=tableTotal(t)>0;return(
+      <button key={t} className={"tcell "+(busy?"tbusy":"tfree")} onClick={()=>{setTable(t);setPaid("");setQ("");setView("order");}}>
+       <div className="tname">Bàn {t}</div>
+       {busy?<div className="tinfo">{tableCount(t)} món<br/><b>{fmt(tableTotal(t))}</b></div>:<div className="tinfo">Trống</div>}
+      </button>
+     );})}
+    </div>
+   </div>
+  )}
+
+  {view==="history"&&(
+   <div className="screen">
+    <div className="row" style={{marginBottom:12}}>
+     <button className="btn light" onClick={()=>setView("tables")}>←</button>
+     <b className="big">📅 Lịch sử doanh thu</b>
+    </div>
+    <div className="report-hero" style={{marginBottom:14}}>
+     <div style={{fontSize:12,opacity:.9}}>TỔNG ~30 NGÀY GẦN NHẤT</div>
+     <div style={{fontSize:28,fontWeight:800,marginTop:4}}>{fmt(monthTotal)}</div>
+     <div style={{fontSize:12,opacity:.9,marginTop:4}}>{history.length+1} ngày được lưu</div>
+    </div>
+    {dayRow(sToday,true)}
+    {history.length===0?<div className="muted" style={{textAlign:"center",padding:"16px 0"}}>Chưa có ngày nào được chốt. Bấm "Chốt ngày" trong tổng kết để lưu lại.</div>:history.map(d=>dayRow(d,false))}
+   </div>
+  )}
+
+  {view==="settings"&&(
+   <div className="screen">
+    <div className="row" style={{marginBottom:12}}>
+     <button className="btn light" onClick={()=>setView("tables")}>←</button>
+     <b className="big">⚙️ Cài đặt</b>
+    </div>
+
+    <div className="card" style={{marginBottom:12}}>
+     <b style={{color:"var(--a8)"}}>Thông tin quán (in trên bill)</b>
+     <div style={{marginTop:8,display:"flex",flexDirection:"column",gap:8}}>
+      <input className="inp" value={shop.name} onChange={e=>setShop(s=>({...s,name:e.target.value}))} placeholder="Tên quán"/>
+      <input className="inp" value={shop.addr} onChange={e=>setShop(s=>({...s,addr:e.target.value}))} placeholder="Địa chỉ"/>
+      <input className="inp" value={shop.phone} onChange={e=>setShop(s=>({...s,phone:e.target.value}))} placeholder="Điện thoại"/>
+     </div>
+    </div>
+
+    <div className="card" style={{marginBottom:12}}>
+     <b style={{color:"var(--a8)"}}>Khổ giấy in nhiệt</b>
+     <div className="flex2" style={{marginTop:8}}>
+      <button className={"btn "+(settings.paper===58?"amber":"light")} onClick={()=>setSettings(s=>({...s,paper:58}))}>58 mm</button>
+      <button className={"btn "+(settings.paper===80?"amber":"light")} onClick={()=>setSettings(s=>({...s,paper:80}))}>80 mm</button>
+     </div>
+    </div>
+
+    <div className="card" style={{marginBottom:12}}>
+     <b style={{color:"var(--a8)"}}>Máy in nhiệt Bluetooth</b>
+     <div className="rowsb" style={{margin:"10px 0"}}>
+      <span className="muted">Trạng thái</span>
+      <b style={{color:btStatus==="connected"?"#15803d":btStatus==="connecting"?"#d97706":"#b08968"}}>
+       {btStatus==="connected"?("✅ Đã kết nối · "+btName):btStatus==="connecting"?"⏳ Đang kết nối...":"⚪ Chưa kết nối"}
+      </b>
+     </div>
+     {btStatus==="connected"?(
+      <div className="flex2">
+       <button className="btn light" onClick={btTest}>🖨 In thử</button>
+       <button className="btn" style={{background:"#fef2f2",color:"#dc2626"}} onClick={btDisconnect}>Ngắt kết nối</button>
+      </div>
+     ):(
+      <button className="btn amber" style={{width:"100%"}} onClick={btConnect}>🔗 Kết nối máy in Bluetooth</button>
+     )}
+     <div className="muted" style={{marginTop:10,lineHeight:1.5}}>
+      Hỗ trợ máy in nhiệt Bluetooth (ESC/POS) phổ biến. Bill được in dạng hình nên <b>tiếng Việt có dấu vẫn đúng</b>. Khi đã kết nối, mọi lệnh in sẽ tự in ra máy này.<br/>
+      ⚠️ <b>iPhone không hỗ trợ</b> in Bluetooth qua web — trên iPhone hãy để chưa kết nối để dùng "In qua hộp thoại".
+     </div>
+    </div>
+
+    <div className="card">
+     <b style={{color:"var(--a8)"}}>Trạng thái mạng</b>
+     <div className="muted" style={{marginTop:6,lineHeight:1.5}}>App lưu dữ liệu ngay trên máy và <b>chạy được cả khi offline</b> sau lần mở đầu. Có thể bật/tắt mạng tùy ý.</div>
+    </div>
+   </div>
+  )}
+
+  {view==="edit"&&(
+   <div className="screen">
+    <div className="rowsb" style={{marginBottom:12}}>
+     <div className="title" style={{margin:0}}>Sửa menu</div>
+     <button className="btn green" onClick={()=>setView("tables")}>✓ Xong</button>
+    </div>
+    <div className="row" style={{marginBottom:12}}>
+     <button className="btn soft" onClick={addCat}>📁 Thêm nhóm</button>
+     <button className="btn" style={{background:"#fef2f2",color:"#dc2626"}} onClick={resetMenu}>🔄 Menu gốc</button>
+    </div>
+    {menu.map(c=>(
+     <div key={c.catId} style={{marginBottom:14}}>
+      <div className="row" style={{marginBottom:8}}>
+       <input className="catinp" value={c.cat} onChange={e=>setCatName(c.catId,e.target.value)}/>
+       <button className="iconbtn" onClick={()=>delCat(c.catId)}>🗑</button>
+      </div>
+      {c.items.map(it=>(
+       <div className="editrow" key={it.id}>
+        <input className="nm" value={it.name} onChange={e=>setItem(c.catId,it.id,{name:e.target.value})}/>
+        <input className="pr" inputMode="numeric" value={it.price} onChange={e=>setItem(c.catId,it.id,{price:parseInt(e.target.value.replace(/\D/g,"")||"0",10)})}/>
+        <span className="muted">K{it.unit||""}</span>
+        <button className="iconbtn" onClick={()=>delItem(c.catId,it.id)}>🗑</button>
+       </div>
+      ))}
+      <button className="ghost" style={{padding:"4px 6px"}} onClick={()=>addItem(c.catId)}>+ Thêm món</button>
+     </div>
+    ))}
+   </div>
+  )}
+
+  {view==="order"&&(
+   <div className="screen">
+    <div className="row" style={{marginBottom:12}}>
+     <button className="btn light" onClick={()=>{setView("tables");setTable(null);setShowOrder(false);}}>←</button>
+     <b className="big">Bàn {table}</b>
+     <div className="search"><span>🔍</span><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Tìm món..."/></div>
+    </div>
+    {filtered.map(c=>(
+     <div key={c.catId}>
+      <div className="cat">{c.cat}</div>
+      <div className="items">
+       {c.items.map(it=>{const qty=(orders[table]||{})[it.id]||0;return(
+        <button key={it.id} className={"item"+(qty?" on":"")} onClick={()=>add(it.id)}>
+         <div className="iname">{it.name}</div>
+         <div className="iprice">{fmt(it.price)}{it.unit||""}</div>
+         {qty>0&&<span className="qbadge">{qty}</span>}
+        </button>
+       );})}
+      </div>
+     </div>
+    ))}
+    <div className="bar"><button className="btn amber" onClick={()=>setShowOrder(true)}><span>🛒 {count} món</span><span>{fmt(total)} · Xem bill</span></button></div>
+    {showOrder&&(
+     <div className="overlay" onClick={()=>setShowOrder(false)}>
+      <div className="sheet" onClick={e=>e.stopPropagation()}>
+       <div style={{display:"flex",justifyContent:"center",paddingTop:8}}><div style={{width:40,height:4,background:"var(--line)",borderRadius:4}}/></div>
+       {orderPanel()}
+      </div>
+     </div>
+    )}
+   </div>
+  )}
+
+  {payOpen&&(
+   <div className="overlay cmodal" onClick={()=>setPayOpen(false)}>
+    <div className="modal" style={{padding:20}} onClick={e=>e.stopPropagation()}>
+     <div style={{textAlign:"center",marginBottom:16}}>
+      <div className="muted">Thanh toán Bàn {table}</div>
+      <div style={{fontSize:30,fontWeight:800,color:"var(--a8)",marginTop:4}}>{fmt(total)}</div>
+      {paidNum>0&&change>=0&&<div style={{color:"#15803d",fontWeight:700,marginTop:4}}>Khách đưa {paidNum.toLocaleString("vi-VN")}đ · Thối {change.toLocaleString("vi-VN")}đ</div>}
+     </div>
+     <div style={{display:"flex",flexDirection:"column",gap:8}}>
+      <button className="btn amber" onClick={()=>doCheckout(true)}>🖨 In bill & thanh toán</button>
+      <button className="btn soft" onClick={()=>doCheckout(false)}>✓ Thanh toán (không in)</button>
+      <button className="ghost" style={{padding:8}} onClick={()=>setPayOpen(false)}>Hủy</button>
+     </div>
+    </div>
+   </div>
+  )}
+
+  {moveOpen&&(
+   <div className="overlay cmodal" onClick={()=>setMoveOpen(false)}>
+    <div className="modal" style={{padding:16}} onClick={e=>e.stopPropagation()}>
+     <div className="rowsb" style={{marginBottom:12}}><b style={{color:"var(--a8)"}}>Chuyển bàn {table} sang bàn trống</b><button className="iconbtn" style={{color:"var(--a5)"}} onClick={()=>setMoveOpen(false)}>✕</button></div>
+     <div className="rowg">{TABLES.filter(t=>t!==table&&tableTotal(t)===0).map(t=>(<button key={t} className="rcell" onClick={()=>moveTable(t)}>Bàn {t}</button>))}</div>
+    </div>
+   </div>
+  )}
+
+  {reportOpen&&(
+   <div className="overlay" style={{alignItems:"flex-end",justifyContent:"center"}} onClick={()=>setReportOpen(false)}>
+    <div className="modal" style={{borderRadius:"18px 18px 0 0"}} onClick={e=>e.stopPropagation()}>
+     <div className="ohead" style={{position:"sticky",top:0}}><b style={{color:"var(--a8)"}}>📊 Tổng kết ngày {sToday.date}</b><button className="iconbtn" style={{color:"var(--a5)"}} onClick={()=>setReportOpen(false)}>✕</button></div>
+     <div style={{padding:16,display:"flex",flexDirection:"column",gap:12}}>
+      <div className="report-hero">
+       <div style={{fontSize:12,opacity:.9}}>TỔNG DOANH THU ĐÃ THU</div>
+       <div style={{fontSize:30,fontWeight:800,marginTop:4}}>{fmt(sToday.revenue)}</div>
+       <div style={{fontSize:12,opacity:.9,marginTop:4}}>{sToday.bills} bill · TB {fmt(avg)}/bill</div>
+      </div>
+      {openValue>0&&<div className="card rowsb" style={{background:"var(--soft)"}}><span className="muted">Bàn đang mở (chưa thu): {openTables} bàn</span><b style={{color:"var(--a8)"}}>{fmt(openValue)}</b></div>}
+      <div>
+       <div style={{fontWeight:700,color:"var(--a8)",marginBottom:6}}>Món đã bán</div>
+       {soldItems.length===0?<div style={{textAlign:"center",color:"var(--mut)",padding:"16px 0"}}>Chưa có bill nào trong ngày</div>:(
+        <div className="sold">{soldItems.map((it,i)=>(<div className="sr" key={i}><span style={{flex:1}}>{it.name}</span><span className="muted" style={{width:40,textAlign:"center"}}>x{it.qty}</span><b style={{width:90,textAlign:"right"}}>{fmt(it.rev)}</b></div>))}</div>
+       )}
+      </div>
+      <div className="flex2">
+       <button className="btn light" onClick={printReport}>🖨 In tổng kết</button>
+       <button className="btn red" onClick={closeDay}>🔄 Chốt ngày</button>
+      </div>
+     </div>
+    </div>
+   </div>
+  )}
+
+  <div id="print-area" style={{fontFamily:"monospace",color:"#000",maxWidth:settings.paper===80?380:320,margin:"0 auto",fontSize:13}}>
+   {printData&&printData.kind==="bill"&&(
+    <React.Fragment>
+     <div style={{textAlign:"center"}}><div style={{fontSize:18,fontWeight:700}}>{shop.name}</div><div style={{fontSize:11}}>{shop.addr}</div><div style={{fontSize:11}}>ĐT: {shop.phone}</div></div>
+     <div style={dash}/>
+     <div style={{...rsb,fontSize:12}}><span>Bàn: {printData.table}</span><span>{new Date().toLocaleString("vi-VN")}</span></div>
+     <div style={dash}/>
+     {printData.items.map((it,i)=>(<div key={i} style={{marginBottom:4}}><div>{it.name}</div><div style={rsb}><span>{it.qty} x {fmt(it.price)}</span><span>{fmt(it.price*it.qty)}</span></div></div>))}
+     <div style={dash}/>
+     <div style={{...rsb,fontWeight:700,fontSize:15}}><span>TỔNG CỘNG</span><span>{fmt(printData.total)}</span></div>
+     {printData.paid>0&&(<React.Fragment><div style={rsb}><span>Khách đưa</span><span>{printData.paid.toLocaleString("vi-VN")}đ</span></div><div style={rsb}><span>Thối lại</span><span>{(printData.change>=0?printData.change:0).toLocaleString("vi-VN")}đ</span></div></React.Fragment>)}
+     <div style={dash}/>
+     <div style={{textAlign:"center",fontSize:12}}>Cảm ơn quý khách!<br/>Hẹn gặp lại ♥</div>
+    </React.Fragment>
+   )}
+   {printData&&printData.kind==="report"&&(
+    <React.Fragment>
+     <div style={{textAlign:"center"}}><div style={{fontSize:18,fontWeight:700}}>{shop.name}</div><div style={{fontSize:13,fontWeight:700,marginTop:4}}>TỔNG KẾT CUỐI NGÀY</div><div style={{fontSize:11}}>Ngày {printData.date}</div><div style={{fontSize:10}}>In lúc {new Date().toLocaleString("vi-VN")}</div></div>
+     <div style={dash}/>
+     <div style={{...rsb,fontWeight:700,fontSize:15}}><span>TỔNG DOANH THU</span><span>{fmt(printData.revenue)}</span></div>
+     <div style={rsb}><span>Số bill</span><span>{printData.bills}</span></div>
+     <div style={rsb}><span>TB / bill</span><span>{fmt(printData.avg)}</span></div>
+     {printData.openValue>0&&<div style={rsb}><span>Bàn chưa thu ({printData.openTables})</span><span>{fmt(printData.openValue)}</span></div>}
+     <div style={dash}/>
+     <div style={{fontWeight:700,marginBottom:4}}>MÓN ĐÃ BÁN</div>
+     {(printData.items||[]).map((it,i)=>(<div key={i} style={rsb}><span>{it.name} x{it.qty}</span><span>{fmt(it.rev)}</span></div>))}
+     <div style={dash}/>
+     <div style={{textAlign:"center",fontSize:11}}>--- Hết ---</div>
+    </React.Fragment>
+   )}
+  </div>
+ </div>
+ );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+
+/* ===== Cài app (PWA) + offline ===== */
+(function(){
+ function icon(size){var c=document.createElement("canvas");c.width=c.height=size;var x=c.getContext("2d");x.fillStyle="#b45309";x.fillRect(0,0,size,size);x.fillStyle="#fff";x.font="bold "+Math.floor(size*0.46)+"px -apple-system,Arial";x.textAlign="center";x.textBaseline="middle";x.fillText("Ốc",size/2,size*0.56);return c.toDataURL("image/png");}
+ try{
+  var manifest={name:"Ốc Hẻm Huế - Bán hàng",short_name:"Ốc Hẻm",start_url:location.href,display:"standalone",orientation:"portrait",background_color:"#fdf8f0",theme_color:"#b45309",icons:[{src:icon(192),sizes:"192x192",type:"image/png",purpose:"any maskable"},{src:icon(512),sizes:"512x512",type:"image/png",purpose:"any maskable"}]};
+  var l=document.createElement("link");l.rel="manifest";l.href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:"application/manifest+json"}));document.head.appendChild(l);
+  var ai=document.createElement("link");ai.rel="apple-touch-icon";ai.href=icon(180);document.head.appendChild(ai);
+ }catch(e){}
+ if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js").catch(function(){}); }
+})();
+</script>
 
